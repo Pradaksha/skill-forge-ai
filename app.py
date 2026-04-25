@@ -1,6 +1,6 @@
 import streamlit as st
 import re
-import docx
+from docx import Document
 import PyPDF2
 from PIL import Image
 import pytesseract
