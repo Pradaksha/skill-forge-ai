@@ -86,7 +86,7 @@ def extract_text(file):
             text += page.extract_text() or ""
 
     elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        doc = docx.Document(file)
+        doc = Document(file)
         for para in doc.paragraphs:
             text += para.text + "\n"
 
