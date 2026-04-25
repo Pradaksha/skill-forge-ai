@@ -1,5 +1,5 @@
 streamlit
 pytesseract
-pillow
-python-docx==0.8.11
+Pillow
+python-docx
 PyPDF2
