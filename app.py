@@ -1,12 +1,25 @@
 import streamlit as st
 import re
+
 try:
     from docx import Document
 except:
     Document = None
-import PyPDF2
-from PIL import Image
-import pytesseract
+
+try:
+    import PyPDF2
+except:
+    PyPDF2 = None
+
+try:
+    from PIL import Image
+except:
+    Image = None
+
+try:
+    import pytesseract
+except:
+    pytesseract = None
 
 # -------------------------------
 # PAGE CONFIG (CENTERED)
