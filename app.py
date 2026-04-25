@@ -1,6 +1,9 @@
 import streamlit as st
 import re
-from docx import Document
+try:
+    from docx import Document
+except:
+    Document = None
 import PyPDF2
 from PIL import Image
 import pytesseract
