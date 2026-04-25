@@ -58,6 +58,13 @@ st.markdown("""
 <p style='text-align: center;'>AI-powered skill gap analysis & learning recommendations</p>
 """, unsafe_allow_html=True)
 
+st.info("""
+1. Paste or upload a resume  
+2. Enter a job description  
+3. Click Analyze Candidate  
+4. View skill gaps and learning roadmap  
+""")
+
 # -------------------------------
 # INPUT MODE
 # -------------------------------
