@@ -127,3 +127,21 @@ streamlit run app.py
 ## Use Case
 
 This system helps students and job seekers identify missing skills and build a structured learning path to achieve their career goals.
+
+## Implementation Note
+
+This project is implemented without using external AI APIs.
+
+The system uses a rule-based approach with predefined skill keywords and text matching techniques to extract skills, compare them, and generate results. This ensures:
+
+- Reliability in deployment (no dependency on external APIs)
+- Faster response time
+- Simpler and more interpretable logic
+
+The focus of this prototype is on demonstrating the core idea of skill gap analysis and learning recommendation in a stable and efficient manner.
+
+## Future Improvements
+
+- Integrate NLP/LLM-based skill extraction
+- Support PDF and image resumes
+- Improve semantic matching using embeddings
