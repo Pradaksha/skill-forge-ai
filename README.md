@@ -41,7 +41,13 @@ PDF and image support are limited in cloud deployment to ensure stability.
 
 ## Architecture
 
+The system follows this pipeline:
+
 User Input → Skill Extraction → Skill Matching → Gap Analysis → Learning Plan → UI Output
+
+### Architecture Diagram
+
+![Architecture](architecture.png)
 
 ---
 
