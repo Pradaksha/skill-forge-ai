@@ -1,7 +1,8 @@
 import streamlit as st
 import re
+from io import BytesIO
 
-# Safe imports
+# Safe import
 try:
     from docx import Document
 except:
@@ -12,8 +13,18 @@ except:
 # -------------------------------
 st.set_page_config(page_title="Skill Forge", layout="centered")
 
+# Center entire app
+st.markdown("""
+<style>
+.block-container {
+    max-width: 700px;
+    margin: auto;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # -------------------------------
-# UI HEADER
+# HEADER
 # -------------------------------
 st.markdown("""
 <h1 style='text-align: center;'>Skill Forge</h1>
@@ -50,12 +61,19 @@ def extract_text(file):
             st.error("Failed to read TXT file.")
             return ""
 
-    # DOCX SUPPORT
+    # DOCX SUPPORT (FIXED)
     elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
         try:
-            doc = Document(file)
+            if Document is None:
+                st.error("DOCX support not available.")
+                return ""
+
+            file_bytes = BytesIO(file.read())
+            doc = Document(file_bytes)
+
             for para in doc.paragraphs:
                 text += para.text + "\n"
+
         except:
             st.error("Failed to read DOCX file.")
             return ""
@@ -83,7 +101,7 @@ else:
 # -------------------------------
 skills_list = [
     "python", "sql", "excel", "machine learning",
-    "data analysis", "pandas", "numpy"
+    "data analysis", "pandas", "numpy", "java"
 ]
 
 # -------------------------------
