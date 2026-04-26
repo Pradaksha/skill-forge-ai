@@ -51,41 +51,57 @@ User Input → Skill Extraction → Skill Matching → Gap Analysis → Learning
 
 ---
 
+
 ## Scoring Logic
 
-Match Score = (Matched Skills / Required Skills) × 100
+The system calculates a match score based on the overlap between required skills and candidate skills.
+
+1. Skills are extracted from the job description and resume using keyword matching.
+2. Matching skills are identified by comparing both lists.
+3. Missing skills are computed as skills present in the job description but absent in the resume.
+
+The match score is calculated as:
+
+Match Score = (Number of Matched Skills / Number of Required Skills) × 100
+
+This provides a simple and interpretable measure of how well a candidate aligns with a given job role.
 
 ---
 
-## Sample Input
+## Sample Input and Output
+
+### Input
 
 Job Description:
 Data Analyst with Python, SQL, Excel
 
 Resume:
-Worked on Excel dashboards
+Experienced in Excel dashboards and basic Python scripting
 
 ---
 
-## Sample Output
+### Output
 
 Required Skills:
-
-* Python
-* SQL
-* Excel
+- Python
+- SQL
+- Excel
 
 Candidate Skills:
+- Python
+- Excel
 
-* Excel
-
-Skill Gaps:
-
-* Python
-* SQL
+Missing Skills:
+- SQL
 
 Match Score:
-33%
+66%
+
+Learning Plan:
+- SQL:
+  - Time Estimate: 2–3 weeks
+  - Resources: YouTube tutorials and practice problems
+  - Suggested Practice: Write basic queries, filtering, joins
 
 ---
 
