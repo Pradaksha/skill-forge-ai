@@ -1,12 +1,5 @@
 import streamlit as st
 import re
-from io import BytesIO
-
-# Safe import
-try:
-    from docx import Document
-except:
-    Document = None
 
 # -------------------------------
 # PAGE CONFIG
@@ -48,38 +41,19 @@ job_desc = st.text_area("Job Description")
 resume_text = ""
 
 # -------------------------------
-# TEXT EXTRACTION FUNCTION
+# TEXT EXTRACTION (TXT ONLY)
 # -------------------------------
 def extract_text(file):
     text = ""
 
-    # TXT SUPPORT
     if file.type == "text/plain":
         try:
             text = file.read().decode("utf-8")
         except:
             st.error("Failed to read TXT file.")
             return ""
-
-    # DOCX SUPPORT (FIXED)
-    elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        try:
-            if Document is None:
-                st.error("DOCX support not available.")
-                return ""
-
-            file_bytes = BytesIO(file.read())
-            doc = Document(file_bytes)
-
-            for para in doc.paragraphs:
-                text += para.text + "\n"
-
-        except:
-            st.error("Failed to read DOCX file.")
-            return ""
-
     else:
-        st.error("Only TXT and DOCX files are supported.")
+        st.error("Only TXT files are supported.")
         return ""
 
     return text
@@ -92,7 +66,7 @@ if mode == "Paste Resume":
     resume_text = st.text_area("Resume")
 
 else:
-    uploaded_file = st.file_uploader("Upload Resume (TXT or DOCX only)", type=["txt", "docx"])
+    uploaded_file = st.file_uploader("Upload Resume (TXT only)", type=["txt"])
     if uploaded_file:
         resume_text = extract_text(uploaded_file)
 

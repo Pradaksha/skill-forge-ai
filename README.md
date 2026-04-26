@@ -11,7 +11,7 @@ It helps job seekers understand what skills they need to improve for specific ro
 ## Features
 
 * Resume input (Paste / Upload)
-* Upload support (TXT, DOCX)
+* Upload support (TXT)
 * Smart skill extraction
 * Skill matching and scoring
 * Personalized learning roadmap
@@ -23,14 +23,13 @@ It helps job seekers understand what skills they need to improve for specific ro
 
 * Python
 * Streamlit
-* python-docx
 
 ---
 
 ## Supported File Types
 
 * TXT
-* DOCX
+
 
 ---
 
