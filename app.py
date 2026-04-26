@@ -91,8 +91,8 @@ def extract_text(file):
             text += para.text + "\n"
 
     elif "image" in file.type:
-        image = Image.open(file)
-        text = pytesseract.image_to_string(image)
+        st.warning("⚠️ Image OCR not supported in deployed version. Please upload PDF or DOCX.")
+        return ""
 
     elif file.type == "text/plain":
         text = str(file.read(), "utf-8")
