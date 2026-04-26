@@ -4,11 +4,10 @@
 Skill Forge is an AI-powered agent that analyzes job descriptions and resumes to identify skill gaps and generate personalized learning plans.
 
 ##  Features
-- Resume upload (PDF, DOCX, TXT, Images)
-- OCR-based text extraction
+- Resume upload (TXT, DOCX)
 - Smart skill extraction
 - Skill matching & scoring
-- Dynamic learning roadmap
+- Personalized learning roadmap
 - Clean interactive UI (Streamlit)
 
 ##  Tech Stack

@@ -1,25 +1,11 @@
 import streamlit as st
 import re
 
+# Safe imports
 try:
     from docx import Document
 except:
     Document = None
-
-try:
-    import PyPDF2
-except:
-    PyPDF2 = None
-
-try:
-    from PIL import Image
-except:
-    Image = None
-
-try:
-    import pytesseract
-except:
-    pytesseract = None
 
 # -------------------------------
 # PAGE CONFIG (CENTERED)
@@ -27,7 +13,7 @@ except:
 st.set_page_config(page_title="Skill Forge", layout="centered")
 
 # -------------------------------
-# CUSTOM CSS (CENTER + CLEAN UI)
+# CUSTOM CSS
 # -------------------------------
 st.markdown("""
 <style>
@@ -35,12 +21,10 @@ st.markdown("""
     max-width: 800px;
     margin: auto;
 }
-
 .block-container {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
-
 .stButton>button {
     width: 100%;
     border-radius: 10px;
@@ -51,7 +35,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -------------------------------
-# HEADER (CENTERED)
+# HEADER
 # -------------------------------
 st.markdown("""
 <h1 style='text-align: center;'>Skill Forge</h1>
@@ -71,31 +55,38 @@ st.info("""
 mode = st.radio("Choose Resume Input Method", ["Paste Resume", "Upload Resume"])
 
 job_desc = st.text_area("📌 Job Description")
-
 resume_text = ""
 
 # -------------------------------
-# FILE HANDLING
+# FILE HANDLING (SAFE ONLY)
 # -------------------------------
 def extract_text(file):
     text = ""
 
-    if file.type == "application/pdf":
-        pdf = PyPDF2.PdfReader(file)
-        for page in pdf.pages:
-            text += page.extract_text() or ""
+    # DOCX
+    if file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        if Document is None:
+            st.error("⚠️ DOCX support not available.")
+            return ""
+        try:
+            doc = Document(file)
+            for para in doc.paragraphs:
+                text += para.text + "\n"
+        except:
+            st.error("⚠️ Failed to read DOCX file.")
+            return ""
 
-    elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        doc = Document(file)
-        for para in doc.paragraphs:
-            text += para.text + "\n"
-
-    elif "image" in file.type:
-        st.warning("⚠️ Image OCR not supported in deployed version. Please upload PDF or DOCX.")
-        return ""
-
+    # TXT
     elif file.type == "text/plain":
-        text = str(file.read(), "utf-8")
+        try:
+            text = str(file.read(), "utf-8")
+        except:
+            st.error("⚠️ Failed to read TXT file.")
+            return ""
+
+    else:
+        st.warning("⚠️ Only TXT and DOCX files are supported in this version.")
+        return ""
 
     return text.lower()
 
@@ -106,8 +97,8 @@ if mode == "Paste Resume":
     resume_text = st.text_area("📄 Resume")
 else:
     uploaded_file = st.file_uploader(
-        "📂 Upload Resume",
-        type=["pdf", "docx", "txt", "png", "jpg", "jpeg"]
+        "📂 Upload Resume (TXT or DOCX only)",
+        type=["txt", "docx"]
     )
     if uploaded_file:
         resume_text = extract_text(uploaded_file)
@@ -134,7 +125,7 @@ def extract_skills(text):
     return list(found)
 
 # -------------------------------
-# LEARNING PLAN (SMART)
+# LEARNING PLAN
 # -------------------------------
 def generate_learning_plan(skill):
     s = skill.lower()
@@ -148,7 +139,6 @@ def generate_learning_plan(skill):
                 "Build small applications"
             ],
             "resources": [
-                ("YouTube", f"https://www.youtube.com/results?search_query={skill}+programming"),
                 ("Docs", f"https://www.google.com/search?q={skill}+documentation"),
                 ("Practice", "https://leetcode.com")
             ],
@@ -164,7 +154,6 @@ def generate_learning_plan(skill):
                 "Build ML models"
             ],
             "resources": [
-                ("YouTube", f"https://www.youtube.com/results?search_query={skill}+tutorial"),
                 ("Datasets", "https://www.kaggle.com"),
                 ("Projects", "https://github.com/topics/machine-learning")
             ],
@@ -180,40 +169,9 @@ def generate_learning_plan(skill):
                 "Experiment with datasets"
             ],
             "resources": [
-                ("Docs", f"https://www.google.com/search?q={skill}+official+documentation"),
-                ("YouTube", f"https://www.youtube.com/results?search_query={skill}+tutorial")
+                ("Docs", f"https://www.google.com/search?q={skill}+official+documentation")
             ],
             "time": "3–6 weeks"
-        }
-
-    elif s in ["power bi", "tableau"]:
-        return {
-            "category": "Visualization Tool",
-            "learning": [
-                "Understand interface",
-                "Create dashboards",
-                "Analyze datasets"
-            ],
-            "resources": [
-                ("YouTube", f"https://www.youtube.com/results?search_query={skill}+dashboard+tutorial"),
-                ("Docs", f"https://www.google.com/search?q={skill}+documentation")
-            ],
-            "time": "2–4 weeks"
-        }
-
-    elif s in ["aws", "docker", "kubernetes"]:
-        return {
-            "category": "Cloud & DevOps",
-            "learning": [
-                "Understand concepts",
-                "Deploy sample applications",
-                "Learn real-world usage"
-            ],
-            "resources": [
-                ("Docs", f"https://www.google.com/search?q={skill}+official+documentation"),
-                ("Labs", "https://labs.play-with-docker.com/")
-            ],
-            "time": "2–5 weeks"
         }
 
     else:
@@ -230,7 +188,7 @@ def generate_learning_plan(skill):
         }
 
 # -------------------------------
-# CENTERED BUTTON
+# BUTTON (CENTERED)
 # -------------------------------
 col1, col2, col3 = st.columns([1,2,1])
 with col2:
@@ -276,9 +234,6 @@ if analyze:
 
     st.markdown(f"## Match Score: {score}%")
 
-    # ---------------------------
-    # LEARNING PLAN
-    # ---------------------------
     if gaps:
         st.markdown("## 📘 Personalized Learning Plan")
 

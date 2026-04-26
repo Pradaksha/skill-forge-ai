@@ -1,5 +1,2 @@
 streamlit
-pytesseract
-Pillow
 python-docx
-PyPDF2
